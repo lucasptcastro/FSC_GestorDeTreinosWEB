@@ -3,9 +3,13 @@
 Frontend do projeto **FIT.AI** (bootcamp), responsável por:
 
 - Tela de **login** com Google OAuth
+- **Onboarding** com chat IA para criação do primeiro plano de treino
 - **Dashboard** com treino do dia, streak e consistência semanal
 - Visualização de **Planos de Treino** com dias e exercícios
 - **Iniciar e completar** sessões de treino
+- **Estatísticas** com heatmap de consistência, taxa de conclusão e tempo total
+- **Perfil** do usuário com dados antropométricos
+- **Chat com IA** (personal trainer virtual) via streaming
 - Navegação inferior com acesso rápido às principais seções
 
 Este README serve como referência: quando você voltar aqui no futuro, deve conseguir entender **como o projeto está organizado, como roda localmente e quais decisões de arquitetura foram tomadas**.
@@ -23,6 +27,10 @@ Este README serve como referência: quando você voltar aqui no futuro, deve con
 - **Lucide React** para ícones
 - **Better Auth** (`better-auth/react`) para autenticação (Google OAuth)
 - **Orval** para geração automática de funções e tipos da API
+- **Vercel AI SDK** (`ai` + `@ai-sdk/react`) para integração com chat IA (streaming)
+- **Streamdown** para renderização de markdown com animação de streaming
+- **nuqs** para gerenciamento de estado via query strings (URL sync)
+- **React Hook Form** + **Zod** para validação de formulários
 - **Day.js** para manipulação de datas
 - **ESLint + Prettier** para lint e formatação
 
@@ -56,10 +64,12 @@ Isso regenera o arquivo `app/_lib/api/fetch-generated/index.ts` com as funções
 .
 ├─ app/
 │  ├─ globals.css              # Tema (variáveis CSS, cores, fontes)
-│  ├─ layout.tsx               # Layout raiz (fontes, metadata)
+│  ├─ layout.tsx               # Layout raiz (fontes, metadata, NuqsAdapter)
 │  ├─ page.tsx                 # Home / Dashboard
 │  ├─ _components/             # Componentes compartilhados do app
 │  │  ├─ bottom-nav.tsx        # Barra de navegação inferior
+│  │  ├─ chat.tsx              # Chat IA (modal flutuante + embedded)
+│  │  ├─ chat-open-button.tsx  # Botão flutuante para abrir o chat
 │  │  ├─ consistency-square.tsx # Quadrado de consistência individual
 │  │  ├─ consistency-tracker.tsx # Grid de consistência semanal
 │  │  └─ workout-day-card.tsx  # Card de dia de treino
@@ -71,6 +81,18 @@ Isso regenera o arquivo `app/_lib/api/fetch-generated/index.ts` com as funções
 │  │        └─ index.ts        # Funções geradas pelo Orval (NÃO editar)
 │  ├─ auth/
 │  │  └─ page.tsx              # Página de login (Google OAuth)
+│  ├─ onboarding/
+│  │  └─ page.tsx              # Onboarding com chat IA
+│  ├─ profile/
+│  │  ├─ page.tsx              # Perfil do usuário + dados antropométricos
+│  │  └─ _components/
+│  │     └─ logout-button.tsx  # Botão de logout
+│  ├─ stats/
+│  │  ├─ page.tsx              # Página de estatísticas
+│  │  └─ _components/
+│  │     ├─ streak-banner.tsx  # Banner com dias de sequência
+│  │     ├─ stats-heatmap.tsx  # Heatmap de consistência (3 meses)
+│  │     └─ stat-card.tsx      # Card de métricas
 │  └─ workout-plans/
 │     └─ [id]/
 │        ├─ page.tsx           # Lista de dias do plano de treino
@@ -82,6 +104,7 @@ Isso regenera o arquivo `app/_lib/api/fetch-generated/index.ts` com as funções
 │              ├─ _actions.ts  # Server Actions (iniciar/completar treino)
 │              └─ _components/
 │                 ├─ back-button.tsx
+│                 ├─ exercise-card.tsx
 │                 ├─ start-workout-button.tsx
 │                 └─ complete-workout-button.tsx
 ├─ components/
@@ -90,7 +113,9 @@ Isso regenera o arquivo `app/_lib/api/fetch-generated/index.ts` com as funções
 │     ├─ badge.tsx
 │     ├─ button.tsx
 │     ├─ card.tsx
-│     └─ input.tsx
+│     ├─ form.tsx
+│     ├─ input.tsx
+│     └─ label.tsx
 ├─ lib/
 │  └─ utils.ts                 # Utilitário cn() (clsx + tailwind-merge)
 ├─ public/                     # Assets estáticos (imagens, ícones)
@@ -102,14 +127,15 @@ Isso regenera o arquivo `app/_lib/api/fetch-generated/index.ts` com as funções
 
 ### `app/layout.tsx`
 
-Layout raiz da aplicação. Configura as fontes do Google (Geist, Geist Mono, Inter Tight, Anton) e define o metadata (`title: "FIT.AI"`).
+Layout raiz da aplicação. Configura as fontes do Google (Geist, Geist Mono, Inter Tight, Anton), define o metadata (`title: "FIT.AI"`), envolve a app com `NuqsAdapter` (para estado via query strings) e renderiza o componente `Chat` em um `Suspense`.
 
 ### `app/page.tsx`
 
 Página principal (Dashboard). Server Component que:
 
 - Verifica a sessão do usuário (redireciona para `/auth` se não autenticado)
-- Busca dados do dia via `getHomeData()` (server-side)
+- Redireciona para `/onboarding` se o usuário não tem plano ativo
+- Busca dados do dia via `getHomeData()` e dados do usuário via `getUserTrainData()` (server-side)
 - Exibe: banner, consistência semanal, streak de treinos e treino do dia
 
 ### `app/_lib/auth-client.ts`
@@ -136,12 +162,15 @@ Arquivo **gerado automaticamente** pelo Orval. Contém todas as funções de cha
 
 ## Páginas
 
-| Rota                               | Descrição                                       | Tipo             |
-| ---------------------------------- | ----------------------------------------------- | ---------------- |
-| `/`                                | Dashboard (treino do dia, streak, consistência) | Server Component |
-| `/auth`                            | Login com Google OAuth                          | Client Component |
-| `/workout-plans/[id]`              | Lista de dias do plano de treino                | Server Component |
-| `/workout-plans/[id]/days/[dayId]` | Detalhe do treino (exercícios, sessão)          | Server Component |
+| Rota                               | Descrição                                          | Tipo             |
+| ---------------------------------- | -------------------------------------------------- | ---------------- |
+| `/`                                | Dashboard (treino do dia, streak, consistência)    | Server Component |
+| `/auth`                            | Login com Google OAuth                             | Client Component |
+| `/onboarding`                      | Onboarding com chat IA para criar o primeiro plano | Client Component |
+| `/profile`                         | Perfil do usuário com dados antropométricos        | Server Component |
+| `/stats`                           | Estatísticas (heatmap, streak, taxa de conclusão)  | Server Component |
+| `/workout-plans/[id]`              | Lista de dias do plano de treino                   | Server Component |
+| `/workout-plans/[id]/days/[dayId]` | Detalhe do treino (exercícios, sessão)             | Server Component |
 
 ---
 
@@ -219,6 +248,36 @@ O frontend sobe em `http://localhost:3000`.
 
 ---
 
+## Chat com IA (Personal Trainer Virtual)
+
+O chat com IA é implementado com o **Vercel AI SDK** e funciona em dois modos:
+
+- **Modal flutuante**: acessível em qualquer página via botão `Sparkles` na navegação inferior. O estado do modal (aberto/fechado e mensagem inicial) é controlado via query strings com **nuqs**.
+- **Embedded (fullscreen)**: usado na página `/onboarding` para guiar o usuário na criação do primeiro plano de treino.
+
+O componente `Chat` (`app/_components/chat.tsx`) usa:
+
+- `useChat()` do `@ai-sdk/react` com `DefaultChatTransport` apontando para o endpoint `/ai` da API
+- **Streamdown** para renderizar respostas em markdown com animação de streaming
+- **React Hook Form** + **Zod** para validação do input de mensagens
+- Mensagens sugeridas para facilitar a interação (ex: "Monte meu plano de treino")
+
+---
+
+## Bibliotecas auxiliares
+
+| Biblioteca          | Uso no projeto                                                           |
+| ------------------- | ------------------------------------------------------------------------ |
+| **Orval**           | Gera funções de fetch e tipos a partir do Swagger da API                 |
+| **nuqs**            | Gerencia estado via query strings da URL (ex: abrir/fechar o chat modal) |
+| **Streamdown**      | Renderiza markdown com animação de streaming (respostas da IA)           |
+| **Vercel AI SDK**   | Integração com chat IA via streaming (`useChat`, `DefaultChatTransport`) |
+| **React Hook Form** | Criação e validação de formulários com integração ao Zod                 |
+| **Zod**             | Validação de schemas (formulários e dados)                               |
+| **Day.js**          | Manipulação e formatação de datas                                        |
+
+---
+
 ## Convenções
 
 - **Server Components** para data fetching sempre que possível
@@ -227,4 +286,6 @@ O frontend sobe em `http://localhost:3000`.
 - Path alias `@/` para imports absolutos
 - Invalidação de cache com `revalidatePath()` após mutações
 - `dayjs` para manipulação de datas (nunca manipulação manual de strings)
-- Componentes do **shadcn/ui** (`Button`, `Card`, etc.) em vez de elementos HTML nativos
+- Componentes do **shadcn/ui** (`Button`, `Card`, `Form`, etc.) em vez de elementos HTML nativos
+- **nuqs** para estado que precisa ser refletido na URL (deep linking)
+- **React Hook Form** + **Zod** para todos os formulários
