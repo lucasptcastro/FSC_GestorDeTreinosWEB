@@ -124,6 +124,7 @@ Usamos as seguintes ferramentas para interagir com a API do projeto:
 - **SEMPRE** use TanStack Query Query para fazer todo data fetching no client-side (Client Components) e, para isso, **SEMPRE** use os hooks presentes em @lib/api/generated.
 - Caso você precise de uma função que não está presente em @lib/api/generated, execute o comando `npx orval` para gerar os arquivos novamente. Caso a função ainda não esteja presente após a execução do comando, INTERROMPA a sua resposta e avise o usuário.
 - Ao chamar o `authClient`, **NUNCA** o coloque dentro de um `try, catch`. **SEMPRE** faça o destructuring do `error` que vem do seu resultado e trate isso corretamente. Exemplo: `const { error } = await authClient.changePassword({})`
+- **SEMPRE** use o componente `Button` do shadcn/ui (`@/components/ui/button`) para botões. **NUNCA** use `<button>` nativo diretamente.
 - **SEMPRE** chame a variação síncrona da mutation ao usar hooks de @lib/api/generated. Nesses casos, **SEMPRE** lide com o casso de sucesso e erro por meio dos parâmetros `onError` e `onSuccess`. Exemplo:
 
   ```tsx
