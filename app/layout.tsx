@@ -28,7 +28,7 @@ const anton = Anton({
 });
 
 export const metadata: Metadata = {
-  title: "FIT.AI",
+  title: "GFIT - Gestão de Treinos",
   description: "O app que vai transformar a forma como você treina.",
 };
 

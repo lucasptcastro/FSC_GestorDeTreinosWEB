@@ -79,7 +79,7 @@ export default async function WorkoutPlanPage({
           className="relative text-[22px] uppercase leading-[1.15] text-background"
           style={{ fontFamily: "var(--font-anton)" }}
         >
-          Fit.ai
+          GFIT
         </p>
 
         <div className="relative flex w-full items-end justify-between">
