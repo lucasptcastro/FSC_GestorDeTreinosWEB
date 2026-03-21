@@ -6,7 +6,7 @@ import {
   getHomeData,
   getUserTrainData,
 } from "@/app/_lib/api/fetch-generated";
-import dayjs from "dayjs";
+import { getToday } from "@/app/_lib/get-today";
 import { CircleCheck, CirclePercent, Hourglass } from "lucide-react";
 import { BottomNav } from "@/app/_components/bottom-nav";
 import { StreakBanner } from "./_components/streak-banner";
@@ -28,7 +28,7 @@ export default async function StatsPage() {
 
   if (!session.data?.user) redirect("/auth");
 
-  const today = dayjs();
+  const today = await getToday();
   const from = today.subtract(2, "month").startOf("month").format("YYYY-MM-DD");
   const to = today.endOf("month").format("YYYY-MM-DD");
 

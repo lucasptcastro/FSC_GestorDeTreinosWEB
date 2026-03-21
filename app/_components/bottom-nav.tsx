@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { House, Calendar, ChartNoAxesColumn, UserRound } from "lucide-react";
-import dayjs from "dayjs";
 import { getHomeData } from "@/app/_lib/api/fetch-generated";
+import { getToday } from "@/app/_lib/get-today";
 import { cn } from "@/lib/utils";
 import { ChatOpenButton } from "@/app/_components/chat-open-button";
 
@@ -10,7 +10,7 @@ interface BottomNavProps {
 }
 
 export async function BottomNav({ activePage = "home" }: BottomNavProps) {
-  const today = dayjs();
+  const today = await getToday();
   const homeData = await getHomeData(today.format("YYYY-MM-DD"));
 
   const calendarHref =

@@ -6,7 +6,7 @@ import {
   getHomeData,
   getUserTrainData,
 } from "@/app/_lib/api/fetch-generated";
-import dayjs from "dayjs";
+import { getToday } from "@/app/_lib/get-today";
 import Image from "next/image";
 import { Calendar, Timer, Dumbbell } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -53,7 +53,7 @@ export default async function WorkoutDayPage({
 
   const [workoutDayData, homeData, trainData] = await Promise.all([
     getWorkoutDay(workoutPlanId, dayId),
-    getHomeData(dayjs().format("YYYY-MM-DD")),
+    getHomeData((await getToday()).format("YYYY-MM-DD")),
     getUserTrainData(),
   ]);
 

@@ -3,6 +3,7 @@ import { Anton, Geist, Geist_Mono, Inter_Tight } from "next/font/google";
 import "./globals.css";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Chat } from "@/app/_components/chat";
+import { TimezoneSetter } from "@/app/_components/timezone-setter";
 import { Suspense } from "react";
 
 const geistSans = Geist({
@@ -42,6 +43,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${interTight.variable} ${anton.variable} antialiased`}
       >
         <NuqsAdapter>
+          <TimezoneSetter />
           {children}
           <Suspense>
             <Chat />

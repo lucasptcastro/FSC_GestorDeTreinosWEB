@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { authClient } from "@/app/_lib/auth-client";
 import { getUserTrainData, getHomeData } from "@/app/_lib/api/fetch-generated";
-import dayjs from "dayjs";
+import { getToday } from "@/app/_lib/get-today";
 import { BottomNav } from "@/app/_components/bottom-nav";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Weight, Ruler, BicepsFlexed, User } from "lucide-react";
@@ -19,7 +19,7 @@ export default async function ProfilePage() {
 
   const [trainData, homeData] = await Promise.all([
     getUserTrainData(),
-    getHomeData(dayjs().format("YYYY-MM-DD")),
+    getHomeData((await getToday()).format("YYYY-MM-DD")),
   ]);
 
   if (trainData.status !== 200) {

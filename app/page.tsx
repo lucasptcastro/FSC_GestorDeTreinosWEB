@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { authClient } from "@/app/_lib/auth-client";
 import { headers } from "next/headers";
 import { getHomeData, getUserTrainData } from "./_lib/api/fetch-generated";
-import dayjs from "dayjs";
+import { getToday } from "./_lib/get-today";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -20,7 +20,7 @@ export default async function Home() {
 
   if (!session.data?.user) redirect("/auth");
 
-  const today = dayjs();
+  const today = await getToday();
   const [homeData, trainData] = await Promise.all([
     getHomeData(today.format("YYYY-MM-DD")),
     getUserTrainData(),
@@ -62,7 +62,7 @@ export default async function Home() {
           className="relative text-[22px] uppercase leading-[1.15] text-background"
           style={{ fontFamily: "var(--font-anton)" }}
         >
-          Fit.ai
+          GFit
         </p>
 
         <div className="relative flex w-full items-end justify-between">
