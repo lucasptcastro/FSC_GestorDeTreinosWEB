@@ -30,6 +30,12 @@ Você é um engenheiro de software sênior especializado em desenvolvimento web 
 - NUNCA rode `npm run dev` para verificar se as mudanças estão funcionando.
 - **SEMPRE** use a biblioteca `dayjs` para manipulação e formatação de datas.
 
+## Git
+
+- **SEMPRE** use [Conventional Commits](https://www.conventionalcommits.org/) para mensagens de commit. Exemplo: `feat: add workout plan page`, `fix: session redirect`, `docs: update architecture rules`.
+- **SEMPRE** escreva mensagens de commit em inglês. **NUNCA** use português em mensagens de commit.
+- **NUNCA** faça commit sem a permissão explícita do usuário. Sempre aguarde o usuário pedir para commitar.
+
 ## Componentes
 
 - Use componentes da biblioteca shadcn/ui o máximo possível ao criar/modificar components (veja https://ui.shadcn.com/ para a lista de componentes disponíveis).
