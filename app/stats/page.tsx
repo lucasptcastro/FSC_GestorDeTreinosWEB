@@ -32,9 +32,11 @@ export default async function StatsPage() {
   const from = today.subtract(2, "month").startOf("month").format("YYYY-MM-DD");
   const to = today.endOf("month").format("YYYY-MM-DD");
 
+  const todayStr = today.format("YYYY-MM-DD");
+
   const [statsResponse, homeData, trainData] = await Promise.all([
-    getStats({ from, to }),
-    getHomeData(today.format("YYYY-MM-DD")),
+    getStats({ from, to, date: todayStr }),
+    getHomeData(todayStr),
     getUserTrainData(),
   ]);
 

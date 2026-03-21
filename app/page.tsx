@@ -10,6 +10,7 @@ import { Flame } from "lucide-react";
 import { BottomNav } from "./_components/bottom-nav";
 import { ConsistencyTracker } from "./_components/consistency-tracker";
 import { WorkoutDayCard } from "./_components/workout-day-card";
+import { RestDayCard } from "./workout-plans/[id]/_components/rest-day-card";
 
 export default async function Home() {
   const session = await authClient.getSession({
@@ -119,19 +120,23 @@ export default async function Home() {
             </button>
           </div>
 
-          <Link
-            href={`/workout-plans/${todayWorkoutDay.workoutPlanId}/days/${todayWorkoutDay.id}`}
-          >
-            <WorkoutDayCard
-              name={todayWorkoutDay.name}
-              weekDay={todayWorkoutDay.weekDay}
-              estimatedDurationInSeconds={
-                todayWorkoutDay.estimatedDurationInSeconds
-              }
-              exercisesCount={todayWorkoutDay.exercisesCount}
-              coverImageUrl={todayWorkoutDay.coverImageUrl}
-            />
-          </Link>
+          {todayWorkoutDay.isRest ? (
+            <RestDayCard weekDay={todayWorkoutDay.weekDay} />
+          ) : (
+            <Link
+              href={`/workout-plans/${todayWorkoutDay.workoutPlanId}/days/${todayWorkoutDay.id}`}
+            >
+              <WorkoutDayCard
+                name={todayWorkoutDay.name}
+                weekDay={todayWorkoutDay.weekDay}
+                estimatedDurationInSeconds={
+                  todayWorkoutDay.estimatedDurationInSeconds
+                }
+                exercisesCount={todayWorkoutDay.exercisesCount}
+                coverImageUrl={todayWorkoutDay.coverImageUrl}
+              />
+            </Link>
+          )}
         </div>
       )}
 
