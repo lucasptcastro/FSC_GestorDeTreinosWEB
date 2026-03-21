@@ -64,9 +64,7 @@ export async function BottomNav({ activePage = "home" }: BottomNavProps) {
         <UserRound
           className={cn(
             "size-6",
-            activePage === "profile"
-              ? "text-foreground"
-              : "text-muted-foreground",
+            activePage === "profile" ? "text-primary" : "text-muted-foreground",
           )}
         />
       </Link>
