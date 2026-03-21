@@ -36,6 +36,7 @@ export function ConsistencyTracker({
               completed={dayData?.workoutDayCompleted ?? false}
               started={dayData?.workoutDayStarted ?? false}
               isToday={dateStr === todayStr}
+              isRest={dayData?.isRest ?? false}
             />
             <span className="font-heading text-xs text-muted-foreground">
               {WEEKDAY_SHORT[index]}

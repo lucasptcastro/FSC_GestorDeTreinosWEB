@@ -93,6 +93,7 @@ export function StatsHeatmap({ consistencyByDay, today }: StatsHeatmapProps) {
                   {week.dates.map((date) => {
                     const dateStr = date.format("YYYY-MM-DD");
                     const dayData = consistencyByDay[dateStr];
+                    const isToday = date.isSame(today, "day");
 
                     if (dayData?.workoutDayCompleted) {
                       return (
@@ -108,6 +109,55 @@ export function StatsHeatmap({ consistencyByDay, today }: StatsHeatmapProps) {
                         <div
                           key={dateStr}
                           className="size-5 rounded-md bg-primary/20"
+                        />
+                      );
+                    }
+
+                    if (dayData?.isRest) {
+                      return (
+                        <div
+                          key={dateStr}
+                          className="size-5 overflow-hidden rounded-md border border-border"
+                        >
+                          <svg
+                            viewBox="0 0 20 20"
+                            className="size-full"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <line
+                              x1="4"
+                              y1="16"
+                              x2="16"
+                              y2="4"
+                              className="stroke-primary"
+                              strokeWidth="2"
+                            />
+                            <line
+                              x1="8"
+                              y1="20"
+                              x2="20"
+                              y2="8"
+                              className="stroke-primary"
+                              strokeWidth="2"
+                            />
+                            <line
+                              x1="0"
+                              y1="12"
+                              x2="12"
+                              y2="0"
+                              className="stroke-primary"
+                              strokeWidth="2"
+                            />
+                          </svg>
+                        </div>
+                      );
+                    }
+
+                    if (isToday) {
+                      return (
+                        <div
+                          key={dateStr}
+                          className="size-5 rounded-md border-[1.6px] border-primary"
                         />
                       );
                     }

@@ -376,6 +376,7 @@ export type GetHomeData200ConsistencyByDay = {
   [key: string]: {
     workoutDayCompleted: boolean;
     workoutDayStarted: boolean;
+    isRest: boolean;
   };
 };
 
@@ -421,6 +422,7 @@ export type GetStats200ConsistencyByDay = {
   [key: string]: {
     workoutDayCompleted: boolean;
     workoutDayStarted: boolean;
+    isRest: boolean;
   };
 };
 
