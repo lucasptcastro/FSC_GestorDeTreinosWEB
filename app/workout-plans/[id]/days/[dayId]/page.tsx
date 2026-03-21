@@ -1,11 +1,7 @@
 import { redirect } from "next/navigation";
 import { authClient } from "@/app/_lib/auth-client";
 import { headers } from "next/headers";
-import {
-  getWorkoutDay,
-  getHomeData,
-  getUserTrainData,
-} from "@/app/_lib/api/fetch-generated";
+import { getWorkoutDay, getHomeData } from "@/app/_lib/api/fetch-generated";
 import { getToday } from "@/app/_lib/get-today";
 import Image from "next/image";
 import { Calendar, Timer, Dumbbell } from "lucide-react";
@@ -51,15 +47,13 @@ export default async function WorkoutDayPage({
 
   const { id: workoutPlanId, dayId } = await params;
 
-  const [workoutDayData, homeData, trainData] = await Promise.all([
+  const [workoutDayData, homeData] = await Promise.all([
     getWorkoutDay(workoutPlanId, dayId),
     getHomeData((await getToday()).format("YYYY-MM-DD")),
-    getUserTrainData(),
   ]);
 
   const needsOnboarding =
-    (homeData.status === 200 && !homeData.data.activeWorkoutPlanId) ||
-    (trainData.status === 200 && !trainData.data);
+    homeData.status === 200 && !homeData.data.activeWorkoutPlanId;
 
   if (needsOnboarding) redirect("/onboarding");
 
@@ -94,7 +88,7 @@ export default async function WorkoutDayPage({
       </div>
 
       <div className="px-5">
-        <div className="relative flex h-[200px] w-full flex-col items-start justify-between overflow-hidden rounded-xl p-5">
+        <div className="relative flex h-50 w-full flex-col items-start justify-between overflow-hidden rounded-xl p-5">
           {coverImageUrl && (
             <Image
               src={coverImageUrl}

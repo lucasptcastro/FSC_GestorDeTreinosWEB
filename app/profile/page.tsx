@@ -27,8 +27,8 @@ export default async function ProfilePage() {
   }
 
   const needsOnboarding =
-    (homeData.status === 200 && !homeData.data.activeWorkoutPlanId) ||
-    !trainData.data;
+    homeData.status === 200 && !homeData.data.activeWorkoutPlanId;
+
   if (needsOnboarding) redirect("/onboarding");
 
   const user = session.data.user;

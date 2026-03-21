@@ -1,11 +1,7 @@
 import { redirect } from "next/navigation";
 import { authClient } from "@/app/_lib/auth-client";
 import { headers } from "next/headers";
-import {
-  getWorkoutPlan,
-  getHomeData,
-  getUserTrainData,
-} from "@/app/_lib/api/fetch-generated";
+import { getWorkoutPlan, getHomeData } from "@/app/_lib/api/fetch-generated";
 import { getToday } from "@/app/_lib/get-today";
 import Image from "next/image";
 import Link from "next/link";
@@ -40,15 +36,13 @@ export default async function WorkoutPlanPage({
 
   const { id } = await params;
 
-  const [workoutPlanData, homeData, trainData] = await Promise.all([
+  const [workoutPlanData, homeData] = await Promise.all([
     getWorkoutPlan(id),
     getHomeData((await getToday()).format("YYYY-MM-DD")),
-    getUserTrainData(),
   ]);
 
   const needsOnboarding =
-    (homeData.status === 200 && !homeData.data.activeWorkoutPlanId) ||
-    (trainData.status === 200 && !trainData.data);
+    homeData.status === 200 && !homeData.data.activeWorkoutPlanId;
 
   if (needsOnboarding) redirect("/onboarding");
 
@@ -63,7 +57,7 @@ export default async function WorkoutPlanPage({
 
   return (
     <div className="flex min-h-svh flex-col bg-background pb-24">
-      <div className="relative flex h-[296px] shrink-0 flex-col items-start justify-between overflow-hidden rounded-b-[20px] px-5 pb-10 pt-5">
+      <div className="relative flex h-74 shrink-0 flex-col items-start justify-between overflow-hidden rounded-b-4xl px-5 pb-10 pt-5">
         <div className="absolute inset-0" aria-hidden="true">
           <Image
             src="/workout-plan-banner.png"

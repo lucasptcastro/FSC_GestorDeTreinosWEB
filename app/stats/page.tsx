@@ -1,11 +1,7 @@
 import { redirect } from "next/navigation";
 import { authClient } from "@/app/_lib/auth-client";
 import { headers } from "next/headers";
-import {
-  getStats,
-  getHomeData,
-  getUserTrainData,
-} from "@/app/_lib/api/fetch-generated";
+import { getStats, getHomeData } from "@/app/_lib/api/fetch-generated";
 import { getToday } from "@/app/_lib/get-today";
 import { CircleCheck, CirclePercent, Hourglass } from "lucide-react";
 import { BottomNav } from "@/app/_components/bottom-nav";
@@ -34,15 +30,13 @@ export default async function StatsPage() {
 
   const todayStr = today.format("YYYY-MM-DD");
 
-  const [statsResponse, homeData, trainData] = await Promise.all([
+  const [statsResponse, homeData] = await Promise.all([
     getStats({ from, to, date: todayStr }),
     getHomeData(todayStr),
-    getUserTrainData(),
   ]);
 
   const needsOnboarding =
-    (homeData.status === 200 && !homeData.data.activeWorkoutPlanId) ||
-    (trainData.status === 200 && !trainData.data);
+    homeData.status === 200 && !homeData.data.activeWorkoutPlanId;
 
   if (needsOnboarding) redirect("/onboarding");
 
