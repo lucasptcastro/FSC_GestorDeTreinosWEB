@@ -5,6 +5,7 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Chat } from "@/app/_components/chat";
 import { TimezoneSetter } from "@/app/_components/timezone-setter";
 import { Suspense } from "react";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -48,6 +49,7 @@ export default function RootLayout({
           <Suspense>
             <Chat />
           </Suspense>
+          <Toaster />
         </NuqsAdapter>
       </body>
     </html>
