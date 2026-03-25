@@ -247,6 +247,7 @@ export type GetWorkoutDay200ExercisesItem = {
   sets: number;
   reps: number;
   restTimeInSeconds: number;
+  completed?: boolean;
 };
 
 export type GetWorkoutDay200SessionsItem = {
@@ -503,6 +504,26 @@ export type UpsertUserTrainData401 = {
 };
 
 export type UpsertUserTrainData500 = {
+  error: string;
+  code: string;
+};
+
+export type CompleteWorkoutExercise200 = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  exerciseCompletedId: string;
+};
+
+export type CompleteWorkoutExercise401 = {
+  error: string;
+  code: string;
+};
+
+export type CompleteWorkoutExercise404 = {
+  error: string;
+  code: string;
+};
+
+export type CompleteWorkoutExercise500 = {
   error: string;
   code: string;
 };
@@ -1112,6 +1133,62 @@ export const upsertUserTrainData = async (
     headers: { "Content-Type": "application/json", ...options?.headers },
     body: JSON.stringify(upsertUserTrainDataBody),
   });
+};
+
+/**
+ * @summary Complete a workout exercise
+ */
+export type completeWorkoutExerciseResponse200 = {
+  data: CompleteWorkoutExercise200;
+  status: 200;
+};
+
+export type completeWorkoutExerciseResponse401 = {
+  data: CompleteWorkoutExercise401;
+  status: 401;
+};
+
+export type completeWorkoutExerciseResponse404 = {
+  data: CompleteWorkoutExercise404;
+  status: 404;
+};
+
+export type completeWorkoutExerciseResponse500 = {
+  data: CompleteWorkoutExercise500;
+  status: 500;
+};
+
+export type completeWorkoutExerciseResponseSuccess =
+  completeWorkoutExerciseResponse200 & {
+    headers: Headers;
+  };
+export type completeWorkoutExerciseResponseError = (
+  | completeWorkoutExerciseResponse401
+  | completeWorkoutExerciseResponse404
+  | completeWorkoutExerciseResponse500
+) & {
+  headers: Headers;
+};
+
+export type completeWorkoutExerciseResponse =
+  | completeWorkoutExerciseResponseSuccess
+  | completeWorkoutExerciseResponseError;
+
+export const getCompleteWorkoutExerciseUrl = (exerciseId: string) => {
+  return `/exercises/complete/${exerciseId}`;
+};
+
+export const completeWorkoutExercise = async (
+  exerciseId: string,
+  options?: RequestInit,
+): Promise<completeWorkoutExerciseResponse> => {
+  return customFetch<completeWorkoutExerciseResponse>(
+    getCompleteWorkoutExerciseUrl(exerciseId),
+    {
+      ...options,
+      method: "POST",
+    },
+  );
 };
 
 /**

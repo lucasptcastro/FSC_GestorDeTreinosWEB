@@ -3,6 +3,7 @@
 import { useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { startWorkoutAction } from "../_actions";
+import { Loader2 } from "lucide-react";
 
 interface StartWorkoutButtonProps {
   workoutPlanId: string;
@@ -27,7 +28,7 @@ export function StartWorkoutButton({
       disabled={isPending}
       className="rounded-full px-4 py-2 font-heading text-sm font-semibold"
     >
-      Iniciar Treino
+      {isPending ? <Loader2 className="animate-spin" /> : "Iniciar Treino"}
     </Button>
   );
 }
