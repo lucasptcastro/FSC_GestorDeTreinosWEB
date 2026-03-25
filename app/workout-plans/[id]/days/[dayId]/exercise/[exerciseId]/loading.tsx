@@ -1,6 +1,6 @@
 import { BottomNav } from "@/app/_components/bottom-nav";
 import { Loader2 } from "lucide-react";
-import { BackButton } from "./_components/back-button";
+import { BackButton } from "../../_components/back-button";
 
 export default async function LoadingPage() {
   return (

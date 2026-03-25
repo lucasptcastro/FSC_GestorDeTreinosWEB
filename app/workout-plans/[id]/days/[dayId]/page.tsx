@@ -152,7 +152,12 @@ export default async function WorkoutDayPage({
         {exercises
           .sort((a, b) => a.order - b.order)
           .map((exercise) => (
-            <ExerciseCard key={exercise.id} exercise={exercise} />
+            <ExerciseCard
+              key={exercise.id}
+              exercise={exercise}
+              workoutPlanId={workoutPlanId}
+              dayId={dayId}
+            />
           ))}
       </div>
 

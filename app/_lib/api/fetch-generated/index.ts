@@ -6,6 +6,66 @@
  * OpenAPI spec version: 1.0.0
  */
 import { customFetch } from "../../fetch";
+/**
+ * @nullable
+ */
+export type GetWorkoutExercise200TrainingTechnique =
+  | (typeof GetWorkoutExercise200TrainingTechnique)[keyof typeof GetWorkoutExercise200TrainingTechnique]
+  | null;
+
+export const GetWorkoutExercise200TrainingTechnique = {
+  REST_PAUSE: "REST_PAUSE",
+  DROP_SET: "DROP_SET",
+  BI_SET: "BI_SET",
+  TRI_SET: "TRI_SET",
+  GIANT_SET: "GIANT_SET",
+  FST_7: "FST_7",
+  FORCED_REPS: "FORCED_REPS",
+  NEGATIVE_REPS: "NEGATIVE_REPS",
+  TEMPO_CONTROL: "TEMPO_CONTROL",
+  ISOMETRY: "ISOMETRY",
+  CLUSTER_SET: "CLUSTER_SET",
+  PYRAMID: "PYRAMID",
+  PRE_EXHAUSTION: "PRE_EXHAUSTION",
+  POST_EXHAUSTION: "POST_EXHAUSTION",
+  TWENTY_ONE: "TWENTY_ONE",
+  OCCLUSION: "OCCLUSION",
+  CHEAT_REPS: "CHEAT_REPS",
+} as const;
+
+export type GetWorkoutExercise200 = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  name: string;
+  order: number;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  workoutDayId: string;
+  sets: number;
+  reps: number;
+  restTimeInSeconds: number;
+  /** @nullable */
+  observation?: string | null;
+  /** @nullable */
+  trainingTechnique?: GetWorkoutExercise200TrainingTechnique;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type GetWorkoutExercise401 = {
+  error: string;
+  code: string;
+};
+
+export type GetWorkoutExercise404 = {
+  error: string;
+  code: string;
+};
+
+export type GetWorkoutExercise500 = {
+  error: string;
+  code: string;
+};
+
 export type ListWorkoutPlansParams = {
   active?: ListWorkoutPlansActive;
 };
@@ -31,6 +91,30 @@ export const ListWorkoutPlans200ItemWorkoutDaysItemWeekDay = {
   SATURDAY: "SATURDAY",
 } as const;
 
+export type ListWorkoutPlans200ItemWorkoutDaysItemExercisesItemTrainingTechnique =
+  (typeof ListWorkoutPlans200ItemWorkoutDaysItemExercisesItemTrainingTechnique)[keyof typeof ListWorkoutPlans200ItemWorkoutDaysItemExercisesItemTrainingTechnique];
+
+export const ListWorkoutPlans200ItemWorkoutDaysItemExercisesItemTrainingTechnique =
+  {
+    REST_PAUSE: "REST_PAUSE",
+    DROP_SET: "DROP_SET",
+    BI_SET: "BI_SET",
+    TRI_SET: "TRI_SET",
+    GIANT_SET: "GIANT_SET",
+    FST_7: "FST_7",
+    FORCED_REPS: "FORCED_REPS",
+    NEGATIVE_REPS: "NEGATIVE_REPS",
+    TEMPO_CONTROL: "TEMPO_CONTROL",
+    ISOMETRY: "ISOMETRY",
+    CLUSTER_SET: "CLUSTER_SET",
+    PYRAMID: "PYRAMID",
+    PRE_EXHAUSTION: "PRE_EXHAUSTION",
+    POST_EXHAUSTION: "POST_EXHAUSTION",
+    TWENTY_ONE: "TWENTY_ONE",
+    OCCLUSION: "OCCLUSION",
+    CHEAT_REPS: "CHEAT_REPS",
+  } as const;
+
 export type ListWorkoutPlans200ItemWorkoutDaysItemExercisesItem = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
@@ -39,6 +123,8 @@ export type ListWorkoutPlans200ItemWorkoutDaysItemExercisesItem = {
   sets: number;
   reps: number;
   restTimeInSeconds: number;
+  observation?: string;
+  trainingTechnique?: ListWorkoutPlans200ItemWorkoutDaysItemExercisesItemTrainingTechnique;
 };
 
 export type ListWorkoutPlans200ItemWorkoutDaysItem = {
@@ -83,6 +169,30 @@ export const CreateWorkoutPlanBodyWorkoutDaysItemWeekDay = {
   SATURDAY: "SATURDAY",
 } as const;
 
+export type CreateWorkoutPlanBodyWorkoutDaysItemExercisesItemTrainingTechnique =
+  (typeof CreateWorkoutPlanBodyWorkoutDaysItemExercisesItemTrainingTechnique)[keyof typeof CreateWorkoutPlanBodyWorkoutDaysItemExercisesItemTrainingTechnique];
+
+export const CreateWorkoutPlanBodyWorkoutDaysItemExercisesItemTrainingTechnique =
+  {
+    REST_PAUSE: "REST_PAUSE",
+    DROP_SET: "DROP_SET",
+    BI_SET: "BI_SET",
+    TRI_SET: "TRI_SET",
+    GIANT_SET: "GIANT_SET",
+    FST_7: "FST_7",
+    FORCED_REPS: "FORCED_REPS",
+    NEGATIVE_REPS: "NEGATIVE_REPS",
+    TEMPO_CONTROL: "TEMPO_CONTROL",
+    ISOMETRY: "ISOMETRY",
+    CLUSTER_SET: "CLUSTER_SET",
+    PYRAMID: "PYRAMID",
+    PRE_EXHAUSTION: "PRE_EXHAUSTION",
+    POST_EXHAUSTION: "POST_EXHAUSTION",
+    TWENTY_ONE: "TWENTY_ONE",
+    OCCLUSION: "OCCLUSION",
+    CHEAT_REPS: "CHEAT_REPS",
+  } as const;
+
 export type CreateWorkoutPlanBodyWorkoutDaysItemExercisesItem = {
   /** @minimum 0 */
   order: number;
@@ -94,6 +204,8 @@ export type CreateWorkoutPlanBodyWorkoutDaysItemExercisesItem = {
   reps: number;
   /** @minimum 1 */
   restTimeInSeconds: number;
+  observation?: string;
+  trainingTechnique?: CreateWorkoutPlanBodyWorkoutDaysItemExercisesItemTrainingTechnique;
 };
 
 export type CreateWorkoutPlanBodyWorkoutDaysItem = {
@@ -126,6 +238,30 @@ export const CreateWorkoutPlan201WorkoutDaysItemWeekDay = {
   SATURDAY: "SATURDAY",
 } as const;
 
+export type CreateWorkoutPlan201WorkoutDaysItemExercisesItemTrainingTechnique =
+  (typeof CreateWorkoutPlan201WorkoutDaysItemExercisesItemTrainingTechnique)[keyof typeof CreateWorkoutPlan201WorkoutDaysItemExercisesItemTrainingTechnique];
+
+export const CreateWorkoutPlan201WorkoutDaysItemExercisesItemTrainingTechnique =
+  {
+    REST_PAUSE: "REST_PAUSE",
+    DROP_SET: "DROP_SET",
+    BI_SET: "BI_SET",
+    TRI_SET: "TRI_SET",
+    GIANT_SET: "GIANT_SET",
+    FST_7: "FST_7",
+    FORCED_REPS: "FORCED_REPS",
+    NEGATIVE_REPS: "NEGATIVE_REPS",
+    TEMPO_CONTROL: "TEMPO_CONTROL",
+    ISOMETRY: "ISOMETRY",
+    CLUSTER_SET: "CLUSTER_SET",
+    PYRAMID: "PYRAMID",
+    PRE_EXHAUSTION: "PRE_EXHAUSTION",
+    POST_EXHAUSTION: "POST_EXHAUSTION",
+    TWENTY_ONE: "TWENTY_ONE",
+    OCCLUSION: "OCCLUSION",
+    CHEAT_REPS: "CHEAT_REPS",
+  } as const;
+
 export type CreateWorkoutPlan201WorkoutDaysItemExercisesItem = {
   /** @minimum 0 */
   order: number;
@@ -137,6 +273,8 @@ export type CreateWorkoutPlan201WorkoutDaysItemExercisesItem = {
   reps: number;
   /** @minimum 1 */
   restTimeInSeconds: number;
+  observation?: string;
+  trainingTechnique?: CreateWorkoutPlan201WorkoutDaysItemExercisesItemTrainingTechnique;
 };
 
 export type CreateWorkoutPlan201WorkoutDaysItem = {
@@ -509,6 +647,62 @@ export type UpsertUserTrainData500 = {
 
 export type Get200 = {
   message: string;
+};
+
+/**
+ * @summary Get a workout exercise
+ */
+export type getWorkoutExerciseResponse200 = {
+  data: GetWorkoutExercise200;
+  status: 200;
+};
+
+export type getWorkoutExerciseResponse401 = {
+  data: GetWorkoutExercise401;
+  status: 401;
+};
+
+export type getWorkoutExerciseResponse404 = {
+  data: GetWorkoutExercise404;
+  status: 404;
+};
+
+export type getWorkoutExerciseResponse500 = {
+  data: GetWorkoutExercise500;
+  status: 500;
+};
+
+export type getWorkoutExerciseResponseSuccess =
+  getWorkoutExerciseResponse200 & {
+    headers: Headers;
+  };
+export type getWorkoutExerciseResponseError = (
+  | getWorkoutExerciseResponse401
+  | getWorkoutExerciseResponse404
+  | getWorkoutExerciseResponse500
+) & {
+  headers: Headers;
+};
+
+export type getWorkoutExerciseResponse =
+  | getWorkoutExerciseResponseSuccess
+  | getWorkoutExerciseResponseError;
+
+export const getGetWorkoutExerciseUrl = (exerciseId: string) => {
+  return `/workout-plans/exercises/${exerciseId}`;
+};
+
+export const getWorkoutExercise = async (
+  exerciseId: string,
+  options?: RequestInit,
+): Promise<getWorkoutExerciseResponse> => {
+  return customFetch<getWorkoutExerciseResponse>(
+    getGetWorkoutExerciseUrl(exerciseId),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
 };
 
 /**
